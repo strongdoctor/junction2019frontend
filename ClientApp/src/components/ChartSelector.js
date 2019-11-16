@@ -10,14 +10,22 @@ export class ChartSelector extends Component{
         const { sensorIds } = this.props;
 
         const buttonJsx = sensorIds.map(id => (
-            <Button className={this.props.activeSensor === id ? 'btn btn-success' : ''} onClick={()=> this.onClick(id)}>Sensor {id}</Button>
+            <Button
+                className={`flex-grow-1 w-100 mx-1${this.props.activeSensor === id ? ' btn btn-success' : ''}`}
+                onClick={()=> this.onClick(id)}
+                key={`charselector-button-${id}`}
+            >
+                Sensor {id}
+            </Button>
         ));
 
 
         return(
-            <ButtonGroup>
+            <div
+                className="d-flex justify-content-between"
+            >
                 {buttonJsx}
-            </ButtonGroup>
+            </div>
         )
     }
 }

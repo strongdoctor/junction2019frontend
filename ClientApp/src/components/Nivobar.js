@@ -3,11 +3,24 @@ import React, { Component } from 'react';
 
 export class Nivobar extends Component{
     render(){
+        const pixelHeight = 600;
+
         if(!this.props.data) {
             return null;
+        } else if(this.props.data.length === 0) {
+            return (
+                <div
+                    style={{
+                        height: `${pixelHeight}px`
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                >
+                    <span>No data available</span>
+                </div>
+            )
         }
 
-        return (<div style={{height: 600}}>
+        return (<div style={{height: pixelHeight}}>
             <ResponsiveBar
                 data={this.props.data}
                 keys={['Visitors']}

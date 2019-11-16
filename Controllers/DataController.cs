@@ -70,10 +70,13 @@ namespace Junction2019.Controllers
                     group x by x.CounterID_ASTA into g
                     select g.OrderBy(y => y.CounterID_ASTA)
                     .First())
-                    .Select(s => s.CounterID_ASTA)
+                    .Select(s => new {
+                        s.CounterID_ASTA,
+                        s.ASTA_Counters.Name_ASTA,
+                        s.PAVE_Counters.CoordinateNorth,
+                        s.PAVE_Counters.CoordinateEast
+                    })
                     .ToList();
-
-            results.Sort();
 
             return Content(JsonConvert.SerializeObject(results), "application/json");
         }

@@ -12,7 +12,7 @@ export class VisitorFilter extends Component{
             startDate: new Date(),
             activeSensor: null,
             data: [],
-            availableSensorIds: null,
+            availableSensors: null,
         }
         this.handleChange = this.handleChange.bind(this);
         this.setActiveSensor = this.setActiveSensor.bind(this);
@@ -59,12 +59,14 @@ export class VisitorFilter extends Component{
 
     render(){
         var chartSelectorJsx = null;
-        if(this.state.availableSensorIds) {
+        if(this.state.availableSensors) {
+            const sensorIds = this.state.availableSensors.map(as => as.CounterID_ASTA);
+
             chartSelectorJsx= (
                 <ChartSelector
                     setActiveSensor={this.setActiveSensor}
                     activeSensor={this.state.activeSensor}
-                    sensorIds={this.state.availableSensorIds}
+                    sensorIds={sensorIds}
                 />
             );
         }
@@ -86,11 +88,11 @@ export class VisitorFilter extends Component{
             response.data = response.data.sort((a,b,) => a > b.TimeOfDay);
 
             self.setState({
-                availableSensorIds: response.data,
-                activeSensor: response.data[0],
+                availableSensors: response.data,
+                activeSensor: response.data[0].CounterID_ASTA,
             });
 
-            self.fetchData(response.data[0], null)
+            self.fetchData(response.data[0].CounterID_ASTA, null)
         });
     }
 }
