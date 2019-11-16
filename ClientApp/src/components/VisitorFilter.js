@@ -1,12 +1,13 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Nivobar } from "./Nivobar";
 import { ChartSelector } from "./ChartSelector";
 import { ChartDatePicker } from "./ChartDatePicker";
 import axios from 'axios';
 import SensorLocationMap from "./SensorLocationMap";
+import { Collapse, Button } from 'reactstrap';
 
-export class VisitorFilter extends Component{
-    constructor(props){
+export class VisitorFilter extends Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -14,12 +15,24 @@ export class VisitorFilter extends Component{
             activeSensor: null,
             data: [],
             availableSensors: null,
+            demoCollapseOpen: false,
+            snowDepth: 0,
+            windSpeed: 0,
+            temperature: 0,
+            rainIntensity: 0,
+            cloudiness: 'partly_cloudy',
         }
         this.handleChange = this.handleChange.bind(this);
         this.setActiveSensor = this.setActiveSensor.bind(this);
+        this.toggleDemoCollapse = this.toggleDemoCollapse.bind(this);
+        this.snowDepthChange = this.snowDepthChange.bind(this);
+        this.temperatureChange = this.temperatureChange.bind(this);
+        this.windSpeedChange = this.windSpeedChange.bind(this);
+        this.rainIntensityChange = this.rainIntensityChange.bind(this);
+        this.cloudinessChange = this.cloudinessChange.bind(this);
     }
 
-    handleChange = date =>{
+    handleChange = date => {
         this.setState({
             startDate: date
         });
@@ -27,7 +40,7 @@ export class VisitorFilter extends Component{
         this.fetchData(null, date);
     }
 
-    setActiveSensor = index =>{
+    setActiveSensor = index => {
         this.setState({
             activeSensor: index
         });
@@ -36,35 +49,66 @@ export class VisitorFilter extends Component{
     }
 
     fetchData = (activeSensor, startDate) => {
-        
-        if(!activeSensor) { activeSensor = this.state.activeSensor }
-        if(!startDate) { startDate = this.state.startDate }
 
-        console.log("activeSensor:", activeSensor, " startDate:", startDate);
+        if (!activeSensor) { activeSensor = this.state.activeSensor }
+        if (!startDate) { startDate = this.state.startDate }
 
         const self = this;
-        const formattedDate = `${startDate.getFullYear()}-${startDate.getMonth()+1}-${startDate.getDate()}`
-        axios.get(`/api/sensor/${activeSensor}/date/${formattedDate}`)
-        .then(function (response) {
-            let reMappedResponse = response.data.map(resp => ({
-                TimeOfDay: resp.startTime.split("T")[1].split(":")[0],
-                Visitors: resp.visits
-            }));
+        const formattedDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+        const {
+            snowDepth,
+            windSpeed,
+            temperature,
+            rainIntensity,
+            cloudiness
+        } = this.state;
 
-            reMappedResponse.sort((a,b,) => a.TimeOfDay > b.TimeOfDay);
-
-            self.setState({
-                data: reMappedResponse
+        axios.get(
+            `/api/sensor/${activeSensor}/date/${formattedDate}/weather?snowDepth=${snowDepth}&windSpeed=${windSpeed}&temperature=${temperature}&rainIntensity=${rainIntensity}&cloudiness=${cloudiness}`
+        )
+            .then(function (response) {
+                console.log("Weather response:", response);
             });
+
+        axios.get(
+            `/api/sensor/${activeSensor}/date/${formattedDate}`
+        )
+            .then(function (response) {
+                let reMappedResponse = response.data.map(resp => ({
+                    TimeOfDay: resp.startTime.split("T")[1].split(":")[0],
+                    Visitors: resp.visits
+                }));
+
+                reMappedResponse.sort((a, b, ) => a.TimeOfDay > b.TimeOfDay);
+
+                self.setState({
+                    data: reMappedResponse
+                });
+            });
+    }
+
+    toggleDemoCollapse() {
+        this.setState({
+            demoCollapseOpen: !this.state.demoCollapseOpen,
         });
     }
 
-    render(){
+    snowDepthChange(e) { this.setState({ snowDepth: e.target.value }) }
+
+    windSpeedChange(e) { this.setState({ windSpeed: e.target.value }) }
+
+    temperatureChange(e) { this.setState({ temperature: e.target.value }) }
+
+    rainIntensityChange(e) { this.setState({ rainIntensity: e.target.value }) }
+
+    cloudinessChange(e) { this.setState({ cloudiness: e.target.value }) }
+
+    render() {
         var chartSelectorJsx = null;
-        if(this.state.availableSensors) {
+        if (this.state.availableSensors) {
             const sensorIds = this.state.availableSensors.map(as => as.CounterID_ASTA);
 
-            chartSelectorJsx= (
+            chartSelectorJsx = (
                 <ChartSelector
                     setActiveSensor={this.setActiveSensor}
                     activeSensor={this.state.activeSensor}
@@ -73,31 +117,86 @@ export class VisitorFilter extends Component{
             );
         }
 
-        return(
+        return (
             <>
-                <SensorLocationMap 
+                <SensorLocationMap
                     setActiveSensor={this.setActiveSensor}
                 />
-                <ChartDatePicker startDate = {this.state.startDate} handleChange = {this.handleChange}/>
+
+                <ChartDatePicker startDate={this.state.startDate} handleChange={this.handleChange} />
+                <Button color="primary" onClick={this.toggleDemoCollapse} style={{ marginTop: '1rem' }}>Toggle demo inputs</Button>
+                <Collapse isOpen={this.state.demoCollapseOpen}>
+                    <div className="d-flex justify-content-between">
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">Snow depth</span>
+                            </div>
+                            <input
+                                type="text"
+                                value={this.state.snowDepth}
+                                className="form-control"
+                                onChange={this.snowDepthChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">Wind speed</span>
+                            </div>
+                            <input
+                                type="text"
+                                value={this.state.windSpeed}
+                                className="form-control"
+                                onChange={this.windSpeedChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">Temperature</span>
+                            </div>
+                            <input
+                                type="text"
+                                value={this.state.temperature}
+                                className="form-control"
+                                onChange={this.temperatureChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">Rain intensity</span>
+                            </div>
+                            <input
+                                type="text"
+                                value={this.state.rainIntensity}
+                                className="form-control"
+                                onChange={this.rainIntensityChange}
+                            />
+                        </div>
+                    </div>
+                    <select value={this.state.cloudiness} onChange={this.cloudinessChange}>
+                        <option value="clear">Clear</option>
+                        <option value="partly_cloudy">Partly Cloudy</option>
+                        <option value="cloudy">Cloudy</option>
+                    </select>
+                </Collapse>
                 {chartSelectorJsx}
-                <Nivobar data = {this.state.data}/>
+                <Nivobar data={this.state.data} />
             </>
         )
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const self = this;
         axios.get('/api/sensor/')
-        .then(function (response) {
+            .then(function (response) {
 
-            response.data = response.data.sort((a,b,) => a > b.TimeOfDay);
+                response.data = response.data.sort((a, b, ) => a > b.TimeOfDay);
 
-            self.setState({
-                availableSensors: response.data,
-                activeSensor: response.data[0].CounterID_ASTA,
+                self.setState({
+                    availableSensors: response.data,
+                    activeSensor: response.data[0].CounterID_ASTA,
+                });
+
+                self.fetchData(response.data[0].CounterID_ASTA, null)
             });
-
-            self.fetchData(response.data[0].CounterID_ASTA, null)
-        });
     }
 }

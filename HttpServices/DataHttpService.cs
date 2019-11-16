@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static Junction2019.Controllers.DataController;
 
 public class DataHttpService : IDataHttpService
 {
@@ -30,5 +31,16 @@ public class DataHttpService : IDataHttpService
         };
 
         return JsonSerializer.Serialize(dummyData);
+    }
+
+    public async Task<string> getRemoteData(
+        int sensorId,
+        DateTime date,
+        WeatherDataModel weatherModel
+    )
+    {
+        var response = await _httpClient.GetAsync("");
+        var responseContents = await response.Content.ReadAsStringAsync();
+        return "test";
     }
 }

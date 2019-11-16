@@ -12,7 +12,6 @@ export default class SensorLocationMap extends Component {
   }
 
   clickHandler(e) {
-    console.log("Event Target:", e.target);
     this.props.setActiveSensor(e.target.options.sensorId);
   }
 
@@ -24,7 +23,7 @@ export default class SensorLocationMap extends Component {
       sensorMarkersJsx = this.state.sensors.map((sensor) => {
         const projectedPosition = Proj4jsHelper
           .convertToDegrees(Number.parseInt(sensor.CoordinateNorth, 10),  Number.parseInt(sensor.CoordinateEast, 10));
-        console.log("Projected in map:", projectedPosition);
+
         return (
           <Marker
             position={projectedPosition}
@@ -45,7 +44,6 @@ export default class SensorLocationMap extends Component {
     
     const position = [this.state.lat, this.state.lng]
     const projectedPosition = Proj4jsHelper.convertToDegrees(position[0], position[1]);
-    console.log("ProjectedPosition:", projectedPosition);
     return (
       <Map
         center={projectedPosition}
