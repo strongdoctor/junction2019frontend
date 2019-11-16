@@ -3,24 +3,11 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
 
 export class ChartDatePicker extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            startDate: new Date()
-        };
-    }
-
-    handleChange = date => {
-        this.setState({
-          startDate: date
-        });
-      };
-
     render() {
         return (
           <DatePicker
-            selected={this.state.startDate}
-            onChange={this.handleChange}
+            selected={this.props.startDate}
+            onChange={this.props.handleChange}
             inline
           />
         );
