@@ -1,3 +1,5 @@
+using System.IO;
+using CsvHelper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 namespace Junction2019
 {
@@ -30,6 +33,15 @@ namespace Junction2019
             });
 
             services.AddHttpClient<IDataHttpService, DataHttpService>();
+
+            var reader = new StreamReader("data_filtered.csv");
+            CsvReader csv = new CsvReader(reader);
+            csv.Configuration.HasHeaderRecord = true;
+            csv.Configuration.Delimiter = ";";
+            csv.Configuration.RegisterClassMap<SensorDataCsvMap>();
+            var records = csv.GetRecords<SensorDataCsvEntry>().ToList();
+
+            services.AddSingleton(records);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
