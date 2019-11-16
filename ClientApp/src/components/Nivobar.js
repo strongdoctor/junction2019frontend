@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 
 export class Nivobar extends Component{
     render(){
+        if(!this.props.data) {
+            return null;
+        }
+
         return (<div style={{height: 600}}>
             <ResponsiveBar
                 data={this.props.data}

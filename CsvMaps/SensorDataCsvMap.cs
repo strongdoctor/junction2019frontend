@@ -12,8 +12,14 @@ public class SensorDataCsvMap: ClassMap<SensorDataCsvEntry>
         Map(m => m.Visits).Name("Visits");
         Map(m => m.ASTA_Counters.CounterID_PAVE).Name("ASTA_Counters.CounterID_PAVE");
         Map(m => m.ASTA_Counters.Name_ASTA).Name("ASTA_Counters.Name_ASTA");
-        Map(m => m.ASTA_Counters.InstallationDate).Name("ASTA_Counters.InstallationDate");
-        Map(m => m.ASTA_Counters.NationalParkCode).Name("ASTA_Counters.NationalParkCode");
+        Map(m => m.ASTA_Counters.InstallationDate)
+            .Name("ASTA_Counters.InstallationDate")
+            .TypeConverterOption.Format("yyyy-MM-dd hh:mm");
+
+        Map(m => m.ASTA_Counters.NationalParkCode)
+            .Name("ASTA_Counters.NationalParkCode")
+            .TypeConverterOption.Format("yyyy-MM-dd hh:mm");
+            
         Map(m => m.ASTA_Counters.Municipality).Name("ASTA_Counters.Municipality");
         Map(m => m.ASTA_Counters.RegionalUnit).Name("ASTA_Counters.RegionalUnit");
         Map(m => m.ASTA_Counters.RegionalEntity).Name("ASTA_Counters.RegionalEntity");

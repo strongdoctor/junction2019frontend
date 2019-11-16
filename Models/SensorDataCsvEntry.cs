@@ -1,3 +1,5 @@
+using System;
+
 public class SensorDataCsvEntry {
     public int CounterReadingID {get;set;}
 
@@ -5,9 +7,9 @@ public class SensorDataCsvEntry {
 
     public string SequenceNumber {get;set;}
 
-    public string StartTime {get;set;}
+    public DateTime StartTime {get;set;}
 
-    public string EndTime {get;set;}
+    public DateTime EndTime {get;set;}
 
     public int Visits {get;set;}
 

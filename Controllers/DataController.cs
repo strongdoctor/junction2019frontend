@@ -10,7 +10,8 @@ using Newtonsoft.Json;
 namespace Junction2019.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Produces("application/json")]
+    [Route("api")]
     public class DataController : ControllerBase
     {
         private readonly IDataHttpService _dataHttpService;
@@ -45,6 +46,36 @@ namespace Junction2019.Controllers
             });
 
             return Content(JsonConvert.SerializeObject(resultCoords), "application/json");
+        }
+
+        [HttpGet("sensor/{sensorId}/date/{date}")]
+        public IActionResult getDayDataReading(int sensorId, DateTime date) {
+            var results = _sensorDataCsvEntries
+                .Where(s => s.CounterID_ASTA == sensorId)
+                .Where(s => s.StartTime.Year == date.Year)
+                .Where(s => s.StartTime.Month == date.Month)
+                .Where(s => s.StartTime.Day == date.Day)
+                .Select(s => new {
+                    StartTime = s.StartTime,
+                    s.Visits
+                })
+                .ToArray();
+    
+            return new JsonResult(results);
+        }
+
+        [HttpGet("sensor")]
+        public IActionResult getSensorIds() {
+            var results = (from x in _sensorDataCsvEntries
+                    group x by x.CounterID_ASTA into g
+                    select g.OrderBy(y => y.CounterID_ASTA)
+                    .First())
+                    .Select(s => s.CounterID_ASTA)
+                    .ToList();
+
+            results.Sort();
+
+            return Content(JsonConvert.SerializeObject(results), "application/json");
         }
     }
 }

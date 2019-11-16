@@ -7,11 +7,16 @@ export class ChartSelector extends Component{
         this.props.setActiveSensor(index)
     } 
     render(){
+        const { sensorIds } = this.props;
+
+        const buttonJsx = sensorIds.map(id => (
+            <Button className={this.props.activeSensor === id ? 'btn btn-success' : ''} onClick={()=> this.onClick(id)}>Sensor {id}</Button>
+        ));
+
+
         return(
             <ButtonGroup>
-                <Button onClick={()=> this.onClick(1)}>Sensor 1</Button>
-                <Button onClick={()=> this.onClick(2)}>Sensor 2</Button>
-                <Button onClick={()=> this.onClick(3)}>Sensor 3</Button>
+                {buttonJsx}
             </ButtonGroup>
         )
     }
