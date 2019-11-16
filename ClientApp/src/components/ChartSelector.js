@@ -22,7 +22,7 @@ export class ChartSelector extends Component{
 
         return(
             <div
-                className="d-flex justify-content-between"
+                className="d-flex justify-content-between mt-3"
             >
                 {buttonJsx}
             </div>

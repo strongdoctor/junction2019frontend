@@ -11,6 +11,11 @@ export default class SensorLocationMap extends Component {
     sensors: [],
   }
 
+  clickHandler(e) {
+    console.log("Event Target:", e.target);
+    this.props.setActiveSensor(e.target.options.sensorId);
+  }
+
   render() {
     //I'm not going to redefine those two in latter examples.
 
@@ -24,6 +29,8 @@ export default class SensorLocationMap extends Component {
           <Marker
             position={projectedPosition}
             key={`sensormarker-${sensor.CounterID_ASTA}`}
+            sensorId={sensor.CounterID_ASTA}
+            onClick={(e) => this.clickHandler(e)}
           >
             <Popup>
               <div><strong>{sensor.CounterID_ASTA}</strong></div>
@@ -43,7 +50,7 @@ export default class SensorLocationMap extends Component {
       <Map
         center={projectedPosition}
         zoom={this.state.zoom}
-        style={{ height: "600px" }}>
+        style={{ height: "450px" }}>
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

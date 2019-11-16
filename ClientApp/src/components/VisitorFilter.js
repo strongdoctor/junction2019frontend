@@ -3,6 +3,7 @@ import { Nivobar } from "./Nivobar";
 import { ChartSelector } from "./ChartSelector";
 import { ChartDatePicker } from "./ChartDatePicker";
 import axios from 'axios';
+import SensorLocationMap from "./SensorLocationMap";
 
 export class VisitorFilter extends Component{
     constructor(props){
@@ -30,6 +31,7 @@ export class VisitorFilter extends Component{
         this.setState({
             activeSensor: index
         });
+
         this.fetchData(index, null);
     }
 
@@ -73,6 +75,9 @@ export class VisitorFilter extends Component{
 
         return(
             <>
+                <SensorLocationMap 
+                    setActiveSensor={this.setActiveSensor}
+                />
                 <ChartDatePicker startDate = {this.state.startDate} handleChange = {this.handleChange}/>
                 {chartSelectorJsx}
                 <Nivobar data = {this.state.data}/>

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 export class Nivobar extends Component{
     render(){
-        const pixelHeight = 600;
+        const pixelHeight = 350;
 
         if(!this.props.data) {
             return null;
