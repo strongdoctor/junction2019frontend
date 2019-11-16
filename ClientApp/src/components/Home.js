@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Word } from "./Word";
 import SensorLocationMap from "./SensorLocationMap";
+import { Nivobar } from "./Nivobar";
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -8,9 +8,10 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <h1>Hello, Spam project</h1>
-        <Word hello="Word"/>
+        <h1>Nuuksio Visitors</h1>
         <SensorLocationMap />
+        
+        <Nivobar />
       </div>
     );
   }
