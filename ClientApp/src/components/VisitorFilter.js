@@ -83,27 +83,15 @@ export class VisitorFilter extends Component {
                     arr1.find(a => a.TimeOfDay === "Evening"),
                 ];
 
+                sortedArr[0].TimeOfDay = "Night (00:00 - 06:00";
+                sortedArr[1].TimeOfDay = "Morning (06:00 - 12:00)";
+                sortedArr[2].TimeOfDay = "Afternoon (12:00 - 18:00)";
+                sortedArr[3].TimeOfDay = "Evening (18:00 - 24:00)";
 
                 self.setState({
                     data: sortedArr
                 });
             });
-
-        // axios.get(
-        //     `/api/sensor/${activeSensor}/date/${formattedDate}`
-        // )
-        //     .then(function (response) {
-        //         let reMappedResponse = response.data.map(resp => ({
-        //             TimeOfDay: resp.startTime.split("T")[1].split(":")[0],
-        //             Visitors: resp.visits
-        //         }));
-
-        //         reMappedResponse.sort((a, b, ) => a.TimeOfDay > b.TimeOfDay);
-
-        //         self.setState({
-        //             data: reMappedResponse
-        //         });
-        //     });
     }
 
     toggleDemoCollapse() {
@@ -140,6 +128,7 @@ export class VisitorFilter extends Component {
             <>
                 <SensorLocationMap
                     setActiveSensor={this.setActiveSensor}
+                    activeSensor={this.state.activeSensor}
                 />
 
                 <ChartDatePicker startDate={this.state.startDate} handleChange={this.handleChange} />
