@@ -17,10 +17,10 @@ export class VisitorFilter extends Component {
             availableSensors: null,
             demoCollapseOpen: false,
             snowDepth: 0,
-            windSpeed: 0,
-            temperature: 0,
-            rainIntensity: 0,
-            cloudiness: 'partly_cloudy',
+            windSpeed: 1,
+            temperature: 21,
+            rainIntensity: 2,
+            cloudiness: 'PartlyCloudy',
         }
         this.handleChange = this.handleChange.bind(this);
         this.setActiveSensor = this.setActiveSensor.bind(this);
@@ -67,24 +67,36 @@ export class VisitorFilter extends Component {
             `/api/sensor/${activeSensor}/date/${formattedDate}/weather?snowDepth=${snowDepth}&windSpeed=${windSpeed}&temperature=${temperature}&rainIntensity=${rainIntensity}&cloudiness=${cloudiness}`
         )
             .then(function (response) {
-                console.log("Weather response:", response);
-            });
+                const arr1 = [];
 
-        axios.get(
-            `/api/sensor/${activeSensor}/date/${formattedDate}`
-        )
-            .then(function (response) {
-                let reMappedResponse = response.data.map(resp => ({
-                    TimeOfDay: resp.startTime.split("T")[1].split(":")[0],
-                    Visitors: resp.visits
-                }));
+                Object.keys(response.data).forEach((key) => {
+                    arr1.push({
+                        TimeOfDay: key,
+                        Visitors: Math.floor(response.data[key]),
+                    });
+                });
 
-                reMappedResponse.sort((a, b, ) => a.TimeOfDay > b.TimeOfDay);
 
                 self.setState({
-                    data: reMappedResponse
+                    data: arr1
                 });
             });
+
+        // axios.get(
+        //     `/api/sensor/${activeSensor}/date/${formattedDate}`
+        // )
+        //     .then(function (response) {
+        //         let reMappedResponse = response.data.map(resp => ({
+        //             TimeOfDay: resp.startTime.split("T")[1].split(":")[0],
+        //             Visitors: resp.visits
+        //         }));
+
+        //         reMappedResponse.sort((a, b, ) => a.TimeOfDay > b.TimeOfDay);
+
+        //         self.setState({
+        //             data: reMappedResponse
+        //         });
+        //     });
     }
 
     toggleDemoCollapse() {
@@ -132,7 +144,7 @@ export class VisitorFilter extends Component {
                                 <span className="input-group-text">Snow depth</span>
                             </div>
                             <input
-                                type="text"
+                                type="number" step="0.01"
                                 value={this.state.snowDepth}
                                 className="form-control"
                                 onChange={this.snowDepthChange}
@@ -143,7 +155,7 @@ export class VisitorFilter extends Component {
                                 <span className="input-group-text">Wind speed</span>
                             </div>
                             <input
-                                type="text"
+                                type="number" step="0.01"
                                 value={this.state.windSpeed}
                                 className="form-control"
                                 onChange={this.windSpeedChange}
@@ -154,7 +166,7 @@ export class VisitorFilter extends Component {
                                 <span className="input-group-text">Temperature</span>
                             </div>
                             <input
-                                type="text"
+                                type="number" step="0.01"
                                 value={this.state.temperature}
                                 className="form-control"
                                 onChange={this.temperatureChange}
@@ -165,7 +177,7 @@ export class VisitorFilter extends Component {
                                 <span className="input-group-text">Rain intensity</span>
                             </div>
                             <input
-                                type="text"
+                                type="number" step="0.01"
                                 value={this.state.rainIntensity}
                                 className="form-control"
                                 onChange={this.rainIntensityChange}
@@ -173,9 +185,9 @@ export class VisitorFilter extends Component {
                         </div>
                     </div>
                     <select value={this.state.cloudiness} onChange={this.cloudinessChange}>
-                        <option value="clear">Clear</option>
-                        <option value="partly_cloudy">Partly Cloudy</option>
-                        <option value="cloudy">Cloudy</option>
+                        <option value="Clear">Clear</option>
+                        <option value="PartlyCloudy">Partly Cloudy</option>
+                        <option value="Cloudy">Cloudy</option>
                     </select>
                 </Collapse>
                 {chartSelectorJsx}

@@ -3,6 +3,5 @@ using System.Threading.Tasks;
 
 public interface IDataHttpService
 {
-    Task<string> getData();
-    Task<string> getRemoteData(int sensorId, DateTime date, WeatherDataModel model);
+    Task<string> getRemoteData(int sensorId, string date, WeatherDataModel model);
 }

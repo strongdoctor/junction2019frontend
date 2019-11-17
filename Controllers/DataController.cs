@@ -24,12 +24,6 @@ namespace Junction2019.Controllers
             _sensorDataCsvEntries = sensorDataCsvEntries;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Content(await _dataHttpService.getData(), "application/json");
-        }
-
         [HttpGet("sensorcoords")]
         public IActionResult getSensorData() {
             var results =(
@@ -67,7 +61,7 @@ namespace Junction2019.Controllers
         [HttpGet("sensor/{sensorId}/date/{date}/weather")]
         public async Task<IActionResult> getDataWithWeather(
             int sensorId,
-            DateTime date,
+            string date,
             [FromQuery] WeatherDataModel weatherModel
         ) {
             var result = await _dataHttpService.getRemoteData(
@@ -76,13 +70,13 @@ namespace Junction2019.Controllers
                 weatherModel
             );
     
-            return Ok();
+            return Content(result, "application/json");
         }
 
         public enum Cloudiness {
-            clear,
-            partly_cloudy,
-            cloudy
+            Clear,
+            PartlyCloudy,
+            Cloudy
         }
 
         [HttpGet("sensor")]

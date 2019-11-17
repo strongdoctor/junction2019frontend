@@ -37,7 +37,7 @@ export class Nivobar extends Component{
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'Hour',
+                    legend: 'Time of day',
                     legendPosition: 'middle',
                     legendOffset: 32
                 }}
