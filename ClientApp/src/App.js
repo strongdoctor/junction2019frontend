@@ -9,7 +9,7 @@ export default class App extends Component {
 
   render () {
     return (
-        <div>
+        <div className="m-5">
           <Switch>
             <Route exact path='/' component={Home} />
           </Switch>

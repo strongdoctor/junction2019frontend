@@ -76,9 +76,16 @@ export class VisitorFilter extends Component {
                     });
                 });
 
+                const sortedArr = [
+                    arr1.find(a => a.TimeOfDay === "Night"),
+                    arr1.find(a => a.TimeOfDay === "Morning"),
+                    arr1.find(a => a.TimeOfDay === "Afternoon"),
+                    arr1.find(a => a.TimeOfDay === "Evening"),
+                ];
+
 
                 self.setState({
-                    data: arr1
+                    data: sortedArr
                 });
             });
 
