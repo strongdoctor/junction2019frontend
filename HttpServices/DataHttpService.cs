@@ -39,8 +39,8 @@ public class DataHttpService : IDataHttpService
         WeatherDataModel weatherModel
     )
     {
-        var response = await _httpClient.GetAsync("");
-        var responseContents = await response.Content.ReadAsStringAsync();
+        // var response = await _httpClient.GetAsync("");
+        // var responseContents = await response.Content.ReadAsStringAsync();
         return "test";
     }
 }

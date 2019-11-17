@@ -18,7 +18,7 @@ namespace Junction2019
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://localhost:5050")
+                .UseUrls("https://localhost:45123")
                 .UseStartup<Startup>();
     }
 }
